@@ -578,7 +578,7 @@
           "¡Ven por favor! 🥺",
           "¡Tienes que venir! 🎉",
           "¡No seas así! 😄",
-          "¡Presiona SÍ! 💝",
+          "¡Presiona SÍ! 🥺",
           "¡Vamos, di que sí! 🎊",
         ];
 
@@ -592,7 +592,7 @@
         // Obtener el contenedor padre (.buttons-container) para posicionamiento relativo
         const buttonsContainer = document.querySelector(".buttons-container");
         const containerRect = buttonsContainer.getBoundingClientRect();
-        
+
         // Dimensiones del área de botones (más pequeña y segura)
         const areaWidth = containerRect.width;
         const areaHeight = containerRect.height;
@@ -603,7 +603,7 @@
         // Calcular posición aleatoria DENTRO del contenedor de botones
         const maxX = areaWidth - buttonWidth - margin;
         const maxY = areaHeight - buttonHeight - margin;
-        
+
         let newX = margin + Math.random() * (maxX - margin);
         let newY = margin + Math.random() * (maxY - margin);
 
@@ -611,10 +611,13 @@
         newX = Math.max(margin, Math.min(newX, maxX));
         newY = Math.max(margin, Math.min(newY, maxY));
 
-        console.log(`Moviendo botón dentro del área de botones: X=${newX}, Y=${newY}, Área: ${areaWidth}x${areaHeight}`);
+        console.log(
+          `Moviendo botón dentro del área de botones: X=${newX}, Y=${newY}, Área: ${areaWidth}x${areaHeight}`
+        );
 
         noButton.style.transform = "scale(0.8) rotate(15deg)";
-        noButton.style.transition = "all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55)";
+        noButton.style.transition =
+          "all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55)";
 
         // Cambiar a posición absoluta dentro del contenedor de botones
         noButton.style.position = "absolute";

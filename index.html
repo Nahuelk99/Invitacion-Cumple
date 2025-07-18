@@ -189,7 +189,7 @@
         gap: 12px; /* Reducido de 15px */
         justify-content: center;
         flex-wrap: wrap;
-        position: relative;
+        position: relative; /* IMPORTANTE: Para que el botón se posicione relativo a este contenedor */
         height: 45px; /* Reducido de 60px */
         align-items: center;
       }
@@ -589,51 +589,39 @@
         const originalText = noButton.textContent;
         noButton.textContent = "¡Noooo! 😭";
 
-        // Usar dimensiones fijas y muy conservadoras
-        const containerWidth = 350; // Ancho fijo del contenedor
-        const containerHeight = 600; // Alto fijo del contenedor
-        const buttonWidth = 60; // Ancho conservador del botón
-        const buttonHeight = 32; // Alto conservador del botón
-        const safeMargin = 30; // Margen de seguridad grande
+        // Obtener el contenedor padre (.buttons-container) para posicionamiento relativo
+        const buttonsContainer = document.querySelector(".buttons-container");
+        const containerRect = buttonsContainer.getBoundingClientRect();
+        
+        // Dimensiones del área de botones (más pequeña y segura)
+        const areaWidth = containerRect.width;
+        const areaHeight = containerRect.height;
+        const buttonWidth = 70; // Ancho real del botón
+        const buttonHeight = 36; // Alto real del botón
+        const margin = 5; // Margen pequeño dentro del contenedor de botones
 
-        // Definir zona ULTRA SEGURA para movimiento
-        const safeZones = [
-          // Zona superior izquierda
-          { x: safeMargin, y: 100, width: 100, height: 80 },
-          // Zona superior derecha
-          { x: 220, y: 100, width: 100, height: 80 },
-          // Zona media izquierda (evita el número 21)
-          { x: safeMargin, y: 200, width: 80, height: 60 },
-          // Zona media derecha (evita el número 21)
-          { x: 240, y: 200, width: 80, height: 60 },
-          // Zona inferior izquierda (evita footer)
-          { x: safeMargin, y: 380, width: 100, height: 60 },
-          // Zona inferior derecha (evita footer)
-          { x: 220, y: 380, width: 100, height: 60 },
-        ];
+        // Calcular posición aleatoria DENTRO del contenedor de botones
+        const maxX = areaWidth - buttonWidth - margin;
+        const maxY = areaHeight - buttonHeight - margin;
+        
+        let newX = margin + Math.random() * (maxX - margin);
+        let newY = margin + Math.random() * (maxY - margin);
 
-        // Seleccionar una zona segura aleatoria
-        const randomZone =
-          safeZones[Math.floor(Math.random() * safeZones.length)];
+        // Asegurar que esté dentro de los límites
+        newX = Math.max(margin, Math.min(newX, maxX));
+        newY = Math.max(margin, Math.min(newY, maxY));
 
-        // Calcular posición dentro de la zona segura seleccionada
-        const newX =
-          randomZone.x + Math.random() * (randomZone.width - buttonWidth);
-        const newY =
-          randomZone.y + Math.random() * (randomZone.height - buttonHeight);
-
-        console.log(`Moviendo botón a zona segura: X=${newX}, Y=${newY}`);
+        console.log(`Moviendo botón dentro del área de botones: X=${newX}, Y=${newY}, Área: ${areaWidth}x${areaHeight}`);
 
         noButton.style.transform = "scale(0.8) rotate(15deg)";
-        noButton.style.transition =
-          "all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55)";
+        noButton.style.transition = "all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55)";
 
-        // Cambiar a posición absoluta dentro del contenedor
+        // Cambiar a posición absoluta dentro del contenedor de botones
         noButton.style.position = "absolute";
         noButton.style.zIndex = "100";
 
         setTimeout(() => {
-          // Aplicar la posición calculada
+          // Aplicar la posición calculada (relativa al contenedor de botones)
           noButton.style.left = newX + "px";
           noButton.style.top = newY + "px";
           noButton.style.transform = "scale(1) rotate(0deg)";

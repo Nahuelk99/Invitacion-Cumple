@@ -48,7 +48,7 @@
         width: 350px;
         height: 600px;
         text-align: center;
-        position: relative;
+        position: relative; /* Asegurar posición relativa */
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
         backdrop-filter: none;
         border: none;
@@ -56,14 +56,14 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        overflow: hidden;
+        overflow: hidden; /* Mantener overflow hidden para que no se salga */
       }
 
       .age-section {
         margin: 0;
         position: absolute;
-        left: 50%;
-        top: 50%;
+        left: 35%;
+        top: 49%;
         transform: translate(-50%, -50%);
         z-index: 10;
       }
@@ -123,7 +123,7 @@
           rgba(64, 64, 64, 0.8) 75%,
           rgba(105, 105, 105, 0.85) 100%
         );
-        padding: 20px;
+        padding: 12px 15px; /* Reducido de 20px */
         border-radius: 0 0 20px 20px;
         position: absolute;
         bottom: 0;
@@ -139,17 +139,18 @@
         background: transparent;
         padding: 0;
         border-radius: 0;
-        margin: 0 0 15px 0;
+        margin: 0 0 8px 0; /* Reducido de 15px */
         border: none;
         backdrop-filter: none;
       }
 
       .detail-item {
-        margin: 8px 0;
-        font-size: 14px;
+        margin: 4px 0; /* Reducido de 8px */
+        font-size: 12px; /* Reducido de 14px */
         color: white;
         font-weight: bold;
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        line-height: 1.2; /* Agregado para reducir espaciado */
       }
 
       .detail-label {
@@ -163,11 +164,11 @@
         align-items: center;
         justify-content: center;
         gap: 5px;
-        margin: 8px 0;
+        margin: 4px 0; /* Reducido de 8px */
       }
 
       .confirmation-section {
-        margin-top: 15px;
+        margin-top: 8px; /* Reducido de 15px */
         background: transparent;
         padding: 0;
         border-radius: 0;
@@ -176,8 +177,8 @@
       }
 
       .confirmation-title {
-        font-size: 16px;
-        margin-bottom: 15px;
+        font-size: 14px; /* Reducido de 16px */
+        margin-bottom: 8px; /* Reducido de 15px */
         color: white;
         font-weight: bold;
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
@@ -185,24 +186,24 @@
 
       .buttons-container {
         display: flex;
-        gap: 15px;
+        gap: 12px; /* Reducido de 15px */
         justify-content: center;
         flex-wrap: wrap;
         position: relative;
-        height: 60px;
+        height: 45px; /* Reducido de 60px */
         align-items: center;
       }
 
       .response-button {
-        padding: 12px 25px;
-        font-size: 16px;
+        padding: 8px 20px; /* Reducido de 12px 25px */
+        font-size: 14px; /* Reducido de 16px */
         font-weight: bold;
         border: none;
         border-radius: 50px;
         cursor: pointer;
         transition: all 0.3s ease;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        min-width: 80px;
+        min-width: 70px; /* Reducido de 80px */
         color: white;
         text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         /* Estilos adicionales para iOS */
@@ -214,8 +215,8 @@
         appearance: none;
         outline: none;
         touch-action: manipulation;
-        min-height: 44px;
-        min-width: 44px;
+        min-height: 36px; /* Reducido de 44px */
+        min-width: 36px; /* Reducido de 44px */
       }
 
       .yes-button {
@@ -352,6 +353,84 @@
         }
       }
 
+      .location-link {
+        color: #fff;
+        text-decoration: none;
+        font-weight: bold;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        position: relative;
+        transition: all 0.3s ease;
+        padding: 2px 8px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        display: inline-block;
+      }
+
+      .location-link:hover {
+        color: #3498db;
+        background: rgba(52, 152, 219, 0.2);
+        border-color: #3498db;
+        text-shadow: 0 0 10px rgba(52, 152, 219, 0.6);
+        transform: translateY(-2px) scale(1.05);
+        box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+      }
+
+      .location-link:active {
+        transform: translateY(0) scale(1);
+        box-shadow: 0 2px 8px rgba(52, 152, 219, 0.2);
+      }
+
+      /* Efecto de pulso al hacer hover */
+      .location-link:hover::before {
+        content: "";
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(45deg, #3498db, #2980b9);
+        border-radius: 10px;
+        z-index: -1;
+        animation: pulse-border 1.5s infinite;
+      }
+
+      @keyframes pulse-border {
+        0% {
+          opacity: 0.7;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.02);
+        }
+        100% {
+          opacity: 0.7;
+          transform: scale(1);
+        }
+      }
+
+      /* Agregar un icono de mapa que aparece en hover */
+      .location-link:hover::after {
+        content: " 🗺️";
+        animation: bounce-icon 0.6s ease-out;
+      }
+
+      @keyframes bounce-icon {
+        0% {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        50% {
+          opacity: 1;
+          transform: translateY(-5px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
       @media (max-width: 768px) {
         .invitation-container {
           width: 95%;
@@ -364,17 +443,20 @@
         }
 
         .response-button {
-          padding: 10px 20px;
-          font-size: 14px;
-          min-width: 70px;
+          padding: 6px 16px; /* Más pequeño en móvil */
+          font-size: 12px; /* Más pequeño en móvil */
+          min-width: 60px;
+          min-height: 32px;
         }
 
         .detail-item {
-          font-size: 12px;
+          font-size: 11px; /* Más pequeño en móvil */
+          margin: 3px 0;
         }
 
         .confirmation-title {
-          font-size: 14px;
+          font-size: 12px; /* Más pequeño en móvil */
+          margin-bottom: 6px;
         }
 
         .emoji-left {
@@ -388,7 +470,26 @@
         }
 
         .event-footer {
-          padding: 15px;
+          padding: 10px 12px; /* Más compacto en móvil */
+        }
+
+        .buttons-container {
+          height: 40px; /* Más pequeño en móvil */
+          gap: 10px;
+        }
+
+        /* Estilos específicos para el enlace de ubicación en móviles */
+        .location-link {
+          padding: 4px 10px;
+          font-size: 11px;
+          min-height: 24px; /* Área táctil mínima */
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .location-link:hover::before {
+          animation: none; /* Reducir animaciones en móvil */
         }
       }
     </style>
@@ -413,7 +514,12 @@
             <span class="detail-label">🕐 HORA:</span> 18:00 HS
           </div>
           <div class="location">
-            <span class="detail-label">📍 LUGAR:</span> Mi casa - Río Seco
+            <span class="detail-label">📍 LUGAR:</span> 
+            <a href="https://www.google.com.ar/maps/@-27.267339,-65.5494999,17z?hl=es&entry=ttu&g_ep=EgoyMDI1MDcxNS4xIKXMDSoASAFQAw%3D%3D" 
+               target="_blank" 
+               class="location-link">
+               Mi casa - Río Seco
+            </a>
           </div>
         </div>
 
@@ -447,9 +553,11 @@
         const buttonWidth = 120;
         const buttonHeight = 50;
 
-        const x = containerRect.width - buttonWidth - 20;
+        // Posicionar el botón "No" a la derecha dentro del contenedor de botones
+        const x = containerRect.width - buttonWidth - 10;
         const y = (containerRect.height - buttonHeight) / 2;
 
+        noButton.style.position = "absolute";
         noButton.style.left = x + "px";
         noButton.style.top = y + "px";
       }
@@ -478,25 +586,57 @@
         const originalText = noButton.textContent;
         noButton.textContent = "¡Noooo! 😭";
 
-        const viewportWidth = window.innerWidth;
-        const viewportHeight = window.innerHeight;
+        // Obtener el contenedor de la invitación en lugar del viewport
+        const invitationContainer = document.querySelector(".invitation-container");
+        const containerRect = invitationContainer.getBoundingClientRect();
+        
+        // Usar dimensiones del contenedor en lugar del viewport
+        const containerWidth = containerRect.width;
+        const containerHeight = containerRect.height;
         const buttonWidth = 120;
         const buttonHeight = 50;
-        const margin = 20;
+        const margin = 15; // Margen más pequeño para móvil
 
-        const maxX = viewportWidth - buttonWidth - margin;
-        const maxY = viewportHeight - buttonHeight - margin;
+        // Calcular límites dentro del contenedor
+        const maxX = containerWidth - buttonWidth - margin;
+        const maxY = containerHeight - buttonHeight - margin;
 
+        // Generar posición aleatoria dentro del contenedor
         let newX = Math.random() * maxX + margin;
         let newY = Math.random() * maxY + margin;
+
+        // Asegurar que no esté en la zona del footer (últimos 120px)
+        const footerZone = 120;
+        if (newY > containerHeight - footerZone) {
+          newY = containerHeight - footerZone - buttonHeight;
+        }
+
+        // Asegurar que no esté en la zona del número "21" (centro)
+        const centerX = containerWidth / 2;
+        const centerY = containerHeight / 2;
+        const avoidRadius = 80;
+        
+        const distanceFromCenter = Math.sqrt(
+          Math.pow(newX + buttonWidth/2 - centerX, 2) + 
+          Math.pow(newY + buttonHeight/2 - centerY, 2)
+        );
+        
+        if (distanceFromCenter < avoidRadius) {
+          // Si está muy cerca del centro, moverlo a un lado
+          newX = newX < centerX ? margin : containerWidth - buttonWidth - margin;
+          newY = centerY - buttonHeight - 40; // Arriba del centro
+        }
 
         noButton.style.transform = "scale(0.8) rotate(15deg)";
         noButton.style.transition =
           "all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55)";
-        noButton.style.position = "fixed";
+        
+        // Cambiar a posición absoluta dentro del contenedor
+        noButton.style.position = "absolute";
         noButton.style.zIndex = "100";
 
         setTimeout(() => {
+          // Usar posición relativa al contenedor
           noButton.style.left = newX + "px";
           noButton.style.top = newY + "px";
           noButton.style.transform = "scale(1) rotate(0deg)";
@@ -584,9 +724,9 @@
         const celebration = document.createElement("div");
         celebration.className = "celebration";
         celebration.innerHTML = `
-                <h2>🎉 ¡GENIAL! 🎉</h2>
-                <p>¡Sabía que vendrías! 🥳</p>
-                <button class="close-button" onclick="closeCelebration()">¡Te espero! 🎊</button>
+                <h2>🎉 ¡ESOOOO! 🥳</h2>
+                <p>¡Sabía que dirías que si! 😉</p>
+                <button class="close-button" onclick="closeCelebration()">¡Te espero! 🎊🎉</button>
             `;
 
         document.body.appendChild(celebration);

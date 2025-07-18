@@ -63,7 +63,7 @@
         margin: 0;
         position: absolute;
         left: 35%;
-        top: 49%;
+        top: 50%;
         transform: translate(-50%, -50%);
         z-index: 10;
       }
@@ -514,11 +514,13 @@
             <span class="detail-label">🕐 HORA:</span> 18:00 HS
           </div>
           <div class="location">
-            <span class="detail-label">📍 LUGAR:</span> 
-            <a href="https://www.google.com.ar/maps/@-27.267339,-65.5494999,17z?hl=es&entry=ttu&g_ep=EgoyMDI1MDcxNS4xIKXMDSoASAFQAw%3D%3D" 
-               target="_blank" 
-               class="location-link">
-               Mi casa - Río Seco
+            <span class="detail-label">📍 LUGAR:</span>
+            <a
+              href="https://www.google.com.ar/maps/@-27.267339,-65.5494999,17z?hl=es&entry=ttu&g_ep=EgoyMDI1MDcxNS4xIKXMDSoASAFQAw%3D%3D"
+              target="_blank"
+              class="location-link"
+            >
+              Mi casa - Río Seco
             </a>
           </div>
         </div>
@@ -548,18 +550,11 @@
       let isEscaping = false;
 
       function positionNoButton() {
-        const container = document.querySelector(".buttons-container");
-        const containerRect = container.getBoundingClientRect();
-        const buttonWidth = 120;
-        const buttonHeight = 50;
-
-        // Posicionar el botón "No" a la derecha dentro del contenedor de botones
-        const x = containerRect.width - buttonWidth - 10;
-        const y = (containerRect.height - buttonHeight) / 2;
-
-        noButton.style.position = "absolute";
-        noButton.style.left = x + "px";
-        noButton.style.top = y + "px";
+        // Posicionar el botón "No" en la posición inicial dentro del contenedor de botones
+        noButton.style.position = "relative";
+        noButton.style.left = "auto";
+        noButton.style.top = "auto";
+        noButton.style.zIndex = "10";
       }
 
       function escapeButton() {
@@ -586,57 +581,61 @@
         const originalText = noButton.textContent;
         noButton.textContent = "¡Noooo! 😭";
 
-        // Obtener el contenedor de la invitación en lugar del viewport
-        const invitationContainer = document.querySelector(".invitation-container");
-        const containerRect = invitationContainer.getBoundingClientRect();
-        
-        // Usar dimensiones del contenedor en lugar del viewport
-        const containerWidth = containerRect.width;
-        const containerHeight = containerRect.height;
-        const buttonWidth = 120;
-        const buttonHeight = 50;
-        const margin = 15; // Margen más pequeño para móvil
+        // Usar dimensiones fijas del contenedor (350x600) en lugar de getBoundingClientRect
+        const containerWidth = 350;
+        const containerHeight = 600;
+        const buttonWidth = 70; // Ancho real del botón reducido
+        const buttonHeight = 36; // Alto real del botón reducido
+        const margin = 20; // Margen de seguridad
 
         // Calcular límites dentro del contenedor
         const maxX = containerWidth - buttonWidth - margin;
         const maxY = containerHeight - buttonHeight - margin;
 
         // Generar posición aleatoria dentro del contenedor
-        let newX = Math.random() * maxX + margin;
-        let newY = Math.random() * maxY + margin;
+        let newX = Math.random() * (maxX - margin) + margin;
+        let newY = Math.random() * (maxY - margin) + margin;
 
-        // Asegurar que no esté en la zona del footer (últimos 120px)
-        const footerZone = 120;
+        // Asegurar que no esté en la zona del footer (últimos 140px)
+        const footerZone = 140;
         if (newY > containerHeight - footerZone) {
-          newY = containerHeight - footerZone - buttonHeight;
+          newY = containerHeight - footerZone - buttonHeight - 10;
         }
 
-        // Asegurar que no esté en la zona del número "21" (centro)
+        // Asegurar que no esté en la zona del número "21" (centro-superior)
         const centerX = containerWidth / 2;
-        const centerY = containerHeight / 2;
-        const avoidRadius = 80;
-        
+        const centerY = containerHeight * 0.45; // Un poco más arriba del centro
+        const avoidRadius = 60;
+
         const distanceFromCenter = Math.sqrt(
-          Math.pow(newX + buttonWidth/2 - centerX, 2) + 
-          Math.pow(newY + buttonHeight/2 - centerY, 2)
+          Math.pow(newX + buttonWidth / 2 - centerX, 2) +
+            Math.pow(newY + buttonHeight / 2 - centerY, 2)
         );
-        
+
         if (distanceFromCenter < avoidRadius) {
-          // Si está muy cerca del centro, moverlo a un lado
-          newX = newX < centerX ? margin : containerWidth - buttonWidth - margin;
-          newY = centerY - buttonHeight - 40; // Arriba del centro
+          // Si está muy cerca del centro, moverlo a los lados
+          if (newX < centerX) {
+            newX = margin; // Lado izquierdo
+          } else {
+            newX = containerWidth - buttonWidth - margin; // Lado derecho
+          }
+          newY = Math.min(newY, centerY - avoidRadius); // Mantenerlo arriba del centro
         }
+
+        // Asegurar que esté dentro de los límites finales
+        newX = Math.max(margin, Math.min(newX, maxX));
+        newY = Math.max(margin, Math.min(newY, maxY));
 
         noButton.style.transform = "scale(0.8) rotate(15deg)";
         noButton.style.transition =
           "all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55)";
-        
+
         // Cambiar a posición absoluta dentro del contenedor
         noButton.style.position = "absolute";
         noButton.style.zIndex = "100";
 
         setTimeout(() => {
-          // Usar posición relativa al contenedor
+          // Usar posición calculada
           noButton.style.left = newX + "px";
           noButton.style.top = newY + "px";
           noButton.style.transform = "scale(1) rotate(0deg)";
@@ -726,7 +725,7 @@
         celebration.innerHTML = `
                 <h2>🎉 ¡ESOOOO! 🥳</h2>
                 <p>¡Sabía que dirías que si! 😉</p>
-                <button class="close-button" onclick="closeCelebration()">¡Te espero! 🎊🎉</button>
+                <button class="close-button" onclick="closeCelebration()">¡Te espero! 🎊</button>
             `;
 
         document.body.appendChild(celebration);

@@ -62,8 +62,8 @@
       .age-section {
         margin: 0;
         position: absolute;
-        left: 35%;
-        top: 50%;
+        left: 40%;
+        top: 51%;
         transform: translate(-50%, -50%);
         z-index: 10;
       }
@@ -549,13 +549,21 @@
       let escapeCount = 0;
       let isEscaping = false;
 
-      function positionNoButton() {
-        // Resetear la posición del botón "No" a su estado inicial
+      function resetNoButton() {
+        // Función de emergencia para resetear el botón "No"
         noButton.style.position = "relative";
         noButton.style.left = "auto";
         noButton.style.top = "auto";
         noButton.style.transform = "none";
         noButton.style.zIndex = "10";
+        noButton.textContent = "No ❌";
+        isEscaping = false;
+        console.log("Botón NO reseteado de emergencia");
+      }
+
+      function positionNoButton() {
+        // Resetear la posición del botón "No" a su estado inicial
+        resetNoButton();
         console.log("Botón NO reseteado a posición inicial");
       }
 
@@ -566,12 +574,10 @@
         escapeCount++;
 
         const messages = [
+          "¡Oleeee! 😄",
           "¡Ven por favor! 🥺",
-          "¡No seas así! 😄",
           "¡Tienes que venir! 🎉",
-          "¡Será genial! 🎂",
-          "¡Te esperamos! 🍺",
-          "¡No te vayas! 😊",
+          "¡No seas así! 😄",
           "¡Presiona SÍ! 💝",
           "¡Vamos, di que sí! 🎊",
         ];
@@ -583,68 +589,40 @@
         const originalText = noButton.textContent;
         noButton.textContent = "¡Noooo! 😭";
 
-        // Obtener el contenedor real y sus dimensiones
-        const container = document.querySelector(".invitation-container");
-        const containerRect = container.getBoundingClientRect();
-        
-        // Dimensiones reales del contenedor
-        const containerWidth = container.offsetWidth;
-        const containerHeight = container.offsetHeight;
-        
-        // Dimensiones del botón (más conservadoras)
-        const buttonWidth = 80; // Un poco más grande para estar seguro
-        const buttonHeight = 40; // Un poco más grande para estar seguro
-        const margin = 15; // Margen de seguridad
+        // Usar dimensiones fijas y muy conservadoras
+        const containerWidth = 350; // Ancho fijo del contenedor
+        const containerHeight = 600; // Alto fijo del contenedor
+        const buttonWidth = 60; // Ancho conservador del botón
+        const buttonHeight = 32; // Alto conservador del botón
+        const safeMargin = 30; // Margen de seguridad grande
 
-        // Calcular límites DENTRO del contenedor con márgenes seguros
-        const minX = margin;
-        const maxX = containerWidth - buttonWidth - margin;
-        const minY = margin + 80; // Evitar la zona superior con emojis
-        const maxY = containerHeight - 150 - margin; // Evitar footer (150px desde abajo)
+        // Definir zona ULTRA SEGURA para movimiento
+        const safeZones = [
+          // Zona superior izquierda
+          { x: safeMargin, y: 100, width: 100, height: 80 },
+          // Zona superior derecha
+          { x: 220, y: 100, width: 100, height: 80 },
+          // Zona media izquierda (evita el número 21)
+          { x: safeMargin, y: 200, width: 80, height: 60 },
+          // Zona media derecha (evita el número 21)
+          { x: 240, y: 200, width: 80, height: 60 },
+          // Zona inferior izquierda (evita footer)
+          { x: safeMargin, y: 380, width: 100, height: 60 },
+          // Zona inferior derecha (evita footer)
+          { x: 220, y: 380, width: 100, height: 60 },
+        ];
 
-        // Generar posición aleatoria DENTRO de los límites seguros
-        let newX = Math.random() * (maxX - minX) + minX;
-        let newY = Math.random() * (maxY - minY) + minY;
+        // Seleccionar una zona segura aleatoria
+        const randomZone =
+          safeZones[Math.floor(Math.random() * safeZones.length)];
 
-        // Zona del número "21" (centro del contenedor)
-        const centerX = containerWidth / 2;
-        const centerY = containerHeight * 0.5; // Centro vertical
-        const avoidRadius = 70; // Radio más grande para evitar el número
+        // Calcular posición dentro de la zona segura seleccionada
+        const newX =
+          randomZone.x + Math.random() * (randomZone.width - buttonWidth);
+        const newY =
+          randomZone.y + Math.random() * (randomZone.height - buttonHeight);
 
-        // Verificar si está muy cerca del número "21"
-        const distanceFromCenter = Math.sqrt(
-          Math.pow(newX + buttonWidth / 2 - centerX, 2) +
-            Math.pow(newY + buttonHeight / 2 - centerY, 2)
-        );
-
-        if (distanceFromCenter < avoidRadius) {
-          // Si está muy cerca del centro, moverlo a una zona segura
-          if (newX < centerX) {
-            // Lado izquierdo
-            newX = minX;
-            newY = minY + Math.random() * 50; // Zona superior izquierda
-          } else {
-            // Lado derecho
-            newX = maxX;
-            newY = minY + Math.random() * 50; // Zona superior derecha
-          }
-        }
-
-        // DOUBLE CHECK: Asegurar que esté dentro de los límites ABSOLUTOS
-        newX = Math.max(minX, Math.min(newX, maxX));
-        newY = Math.max(minY, Math.min(newY, maxY));
-
-        // TRIPLE CHECK: Verificar que no se salga del contenedor
-        if (newX + buttonWidth > containerWidth) {
-          newX = containerWidth - buttonWidth - margin;
-        }
-        if (newY + buttonHeight > containerHeight) {
-          newY = containerHeight - buttonHeight - margin;
-        }
-        if (newX < 0) newX = margin;
-        if (newY < 0) newY = margin;
-
-        console.log(`Moviendo botón a: X=${newX}, Y=${newY}, Container: ${containerWidth}x${containerHeight}`);
+        console.log(`Moviendo botón a zona segura: X=${newX}, Y=${newY}`);
 
         noButton.style.transform = "scale(0.8) rotate(15deg)";
         noButton.style.transition =
@@ -859,6 +837,32 @@
           confirmAssistance();
         });
       }
+
+      // Función de emergencia - se puede activar desde la consola
+      window.resetButton = function () {
+        resetNoButton();
+        alert("¡Botón reseteado!");
+      };
+
+      // Auto-reset cada 10 segundos si el botón está fuera de vista
+      setInterval(() => {
+        const rect = noButton.getBoundingClientRect();
+        const container = document.querySelector(".invitation-container");
+        const containerRect = container.getBoundingClientRect();
+
+        // Verificar si el botón está completamente fuera del contenedor
+        if (
+          rect.left < containerRect.left ||
+          rect.right > containerRect.right ||
+          rect.top < containerRect.top ||
+          rect.bottom > containerRect.bottom
+        ) {
+          console.log(
+            "Botón detectado fuera del contenedor - reseteando automáticamente"
+          );
+          resetNoButton();
+        }
+      }, 5000); // Verificar cada 5 segundos
     </script>
   </body>
 </html>
